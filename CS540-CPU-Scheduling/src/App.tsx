@@ -1,20 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import Scheduler from "./components/Scheduler";
+import { fifo } from "./utils/algorithms"; // Import an algorithm for testing
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [results, setResults] = useState<any>(null);
 
-  return (
-    <>
-      <div>
-        <p>
-          Hello World!
-        </p>
-      </div>
-    </>
-  )
+    const runAlgorithm = (processes: any[], timeQuantum: number) => {
+        const result = fifo(processes); // Replace 'fifo' with any algorithm
+        setResults(result);
+    };
+
+    return (
+        <div>
+            <h1>CPU Scheduling Simulator</h1>
+            <Scheduler runAlgorithm={runAlgorithm} />
+            <pre>{JSON.stringify(results, null, 2)}</pre> {/* Display results */}
+        </div>
+    );
 }
 
-export default App
+export default App;
