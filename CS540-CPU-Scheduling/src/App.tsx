@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Scheduler from "./components/Scheduler";
 import { fifo } from "./utils/algorithms"; // Import an algorithm for testing
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
     const [results, setResults] = useState<any>(null);
@@ -12,8 +14,8 @@ function App() {
     };
 
     return (
-        <div>
-            <h1>CPU Scheduling Simulator</h1>
+        <div className="container">
+            <h1 className="text-center">CPU Scheduling Simulator</h1>
             {/* Dropdown for Algorithm Selection */}
             <select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
                 <option value="fifo">FIFO</option>
