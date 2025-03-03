@@ -14,8 +14,15 @@ function App() {
     };
 
     return (
-        <div className="container">
+        <div className="container text-center shadow-lg p-3 rounded">
             <h1 className="text-center">CPU Scheduling Simulator</h1>
+            <div className="row">
+                <Scheduler runAlgorithm={runAlgorithm} />
+                <pre>{JSON.stringify(results, null, 2)}</pre> {/* Display results */}
+            </div>
+            <div className="row">
+
+            </div>
             {/* Dropdown for Algorithm Selection */}
             <select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
                 <option value="fifo">FIFO</option>
@@ -24,8 +31,6 @@ function App() {
                 <option value="rr">Round Robin</option>
                 <option value="mlfq">MLFQ</option>
             </select>
-            <Scheduler runAlgorithm={runAlgorithm} />
-            <pre>{JSON.stringify(results, null, 2)}</pre> {/* Display results */}
         </div>
     );
 }

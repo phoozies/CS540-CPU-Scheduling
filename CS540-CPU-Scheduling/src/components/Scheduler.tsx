@@ -11,11 +11,20 @@ export default function Scheduler({ runAlgorithm }: { runAlgorithm: Function }) 
     };
 
     return (
-        <div>
-            <input type="number" value={numProcesses} onChange={(e) => setNumProcesses(Number(e.target.value))} />
-            <input type="number" value={timeQuantum} onChange={(e) => setTimeQuantum(Number(e.target.value))} />
-            <button onClick={handleGenerate}>Generate Processes</button>
-            <button onClick={() => runAlgorithm(processes, timeQuantum)}>Run Algorithm</button>
+        <div className="container">
+            <div className="input-group mb-3">
+                <span className="input-group-text" id="basic-addon1">Number of Processes</span>
+                <input type="number" className="form-control" value={numProcesses} onChange={(e) => setNumProcesses(Number(e.target.value))} />
+            </div>
+
+            <div className="input-group mb-3">
+                <span className="input-group-text" id="basic-addon1">Set Time Quantum (RR ONLY)</span>
+                <input type="number" className="form-control" value={timeQuantum} onChange={(e) => setTimeQuantum(Number(e.target.value))} />
+            </div>
+
+
+            <button className="btn btn-primary" onClick={handleGenerate}>Generate Processes</button>
+            <button className="btn btn-secondary" onClick={() => runAlgorithm(processes, timeQuantum)}>Run Algorithm</button>
         </div>
     );
 }
