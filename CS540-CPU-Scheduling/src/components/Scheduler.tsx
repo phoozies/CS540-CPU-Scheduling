@@ -25,6 +25,29 @@ export default function Scheduler({ runAlgorithm }: { runAlgorithm: Function }) 
 
             <button className="btn btn-primary" onClick={handleGenerate}>Generate Processes</button>
             <button className="btn btn-secondary" onClick={() => runAlgorithm(processes, timeQuantum)}>Run Algorithm</button>
+
+                        {/* Table to display generated processes */}
+            <div className="mt-4">
+                <h4>Generated Processes:</h4>
+                <table className="table table-bordered">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>Process ID</th>
+                            <th>Arrival Time</th>
+                            <th>Burst Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {processes.map((process) => (
+                            <tr key={process.id}>
+                                <td>{process.id}</td>
+                                <td>{process.arrival}</td>
+                                <td>{process.burst}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
