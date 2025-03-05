@@ -1,0 +1,51 @@
+import React, { useState } from "react";
+
+const algorithmOptions = [
+    { value: "fifo", label: "FIFO" },
+    { value: "sjf", label: "SJF" },
+    { value: "stcf", label: "STCF" },
+    { value: "rr", label: "Round Robin" },
+    { value: "mlfq", label: "MLFQ" }
+];
+
+export default function AlgorithmSelector({ runAlgorithms, timeQuantum }: any) {
+    const [selectedAlgorithms, setSelectedAlgorithms] = useState<string[]>([]);
+
+    // Toggle selection
+    const handleCheckboxChange = (value: string) => {
+        setSelectedAlgorithms((prev) =>
+            prev.includes(value) ? prev.filter((alg) => alg !== value) : [...prev, value]
+        );
+    };
+
+    return (
+        <div className="text-center">
+            <h4>Select Algorithms</h4>
+            
+            {/* Algorithm Selection Checkboxes */}
+            <div className="d-flex flex-column align-items-center">
+                {algorithmOptions.map((alg) => (
+                    <div key={alg.value} className="form-check">
+                        <input
+                            type="checkbox"
+                            className="form-check-input"
+                            id={alg.value}
+                            checked={selectedAlgorithms.includes(alg.value)}
+                            onChange={() => handleCheckboxChange(alg.value)}
+                        />
+                        <label className="form-check-label" htmlFor={alg.value}>{alg.label}</label>
+                    </div>
+                ))}
+            </div>
+
+            {/* Button to Run Selected Algorithms */}
+            <button
+                className="btn btn-primary mt-3"
+                onClick={() => runAlgorithms(selectedAlgorithms, timeQuantum)}
+                disabled={selectedAlgorithms.length === 0}
+            >
+                Run Selected Algorithms
+            </button>
+        </div>
+    );
+}

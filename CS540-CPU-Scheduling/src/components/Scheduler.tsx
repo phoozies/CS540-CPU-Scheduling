@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { generateProcesses } from "../utils/generator";
+import Controls from "./Controls";
+import ProcessTable from "./ProcessTable";
+import AlgorithmSelector from "./AlgorithmSelector";
+import { fifo, sjf, stcf, rr, mlfq } from "../utils/algorithms"; // Import all algorithms
 
-export default function Scheduler({ runAlgorithm }: { runAlgorithm: Function }) {
+const algorithmMap: any = { fifo, sjf, stcf, rr, mlfq };
+
+export default function Scheduler({ setResults }: { setResults: Function }) {
     const [numProcesses, setNumProcesses] = useState(5);
     const [timeQuantum, setTimeQuantum] = useState(2);
     const [processes, setProcesses] = useState(generateProcesses(5));
@@ -10,43 +16,43 @@ export default function Scheduler({ runAlgorithm }: { runAlgorithm: Function }) 
         setProcesses(generateProcesses(numProcesses));
     };
 
+    // Run selected algorithms and store results
+    const runAlgorithms = (selectedAlgorithms: string[], timeQuantum: number) => {
+        const results = selectedAlgorithms.map((alg) => ({
+            algorithm: alg.toUpperCase(),
+            result: algorithmMap[alg](processes, timeQuantum)
+        }));
+        setResults(results);
+    };
+
     return (
         <div className="container">
-            <div className="input-group mb-3">
-                <span className="input-group-text" id="basic-addon1">Number of Processes</span>
-                <input type="number" className="form-control" value={numProcesses} onChange={(e) => setNumProcesses(Number(e.target.value))} />
+            {/* Row 1 - Two Columns */}
+            <div className="row mb-3">
+                {/* Column 1: Controls */}
+                <div className="col-md-6">
+                    <Controls
+                        numProcesses={numProcesses}
+                        setNumProcesses={setNumProcesses}
+                        timeQuantum={timeQuantum}
+                        setTimeQuantum={setTimeQuantum}
+                        handleGenerate={handleGenerate}
+                        runAlgorithm={runAlgorithms} // Modified function name
+                        processes={processes}
+                    />
+                </div>
+
+                {/* Column 2: Algorithm Selector (Checkboxes) */}
+                <div className="col-md-6">
+                    <AlgorithmSelector runAlgorithms={runAlgorithms} timeQuantum={timeQuantum} />
+                </div>
             </div>
 
-            <div className="input-group mb-3">
-                <span className="input-group-text" id="basic-addon1">Set Time Quantum (RR ONLY)</span>
-                <input type="number" className="form-control" value={timeQuantum} onChange={(e) => setTimeQuantum(Number(e.target.value))} />
-            </div>
-
-
-            <button className="btn btn-primary" onClick={handleGenerate}>Generate Processes</button>
-            <button className="btn btn-secondary" onClick={() => runAlgorithm(processes, timeQuantum)}>Run Algorithm</button>
-
-                        {/* Table to display generated processes */}
-            <div className="mt-4">
-                <h4>Generated Processes:</h4>
-                <table className="table table-bordered">
-                    <thead className="table-dark">
-                        <tr>
-                            <th>Process ID</th>
-                            <th>Arrival Time</th>
-                            <th>Burst Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {processes.map((process) => (
-                            <tr key={process.id}>
-                                <td>{process.id}</td>
-                                <td>{process.arrival}</td>
-                                <td>{process.burst}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            {/* Row 2 - Process Table */}
+            <div className="row">
+                <div className="col">
+                    <ProcessTable processes={processes} />
+                </div>
             </div>
         </div>
     );
