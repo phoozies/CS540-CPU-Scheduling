@@ -11,27 +11,35 @@ export const generatePdf = async (
 ) => {
     const doc = new jsPDF("p", "mm", "a4"); // Set page size to A4 (standard)
     let yOffset = 10; // Start position for adding content in the PDF
+    const maxHeight = 270; // Maximum height of content on a page before a new page is needed
+    const contentMargin = 10; // Margin for the content
 
-    const maxHeight = 270; // Height of the page before switching to a new one (A4 height - some margin)
+    // Helper function to check if adding new content will overflow the page
+    const checkPageOverflow = (contentHeight: number) => {
+        if (yOffset + contentHeight > maxHeight) {
+            doc.addPage();
+            yOffset = contentMargin; // Reset Y offset for new page
+        }
+    };
 
     // Capture Gantt charts
     for (let i = 0; i < results.length; i++) {
+        const res = results[i];
 
         // Capture Gantt Chart for this result
         if (ganttRef.current) {
             const chartCanvas = ganttRef.current.querySelectorAll("canvas")[i];
             if (chartCanvas) {
                 const canvasImage = chartCanvas.toDataURL("image/png");
-                // Add image to the PDF
-                doc.addImage(canvasImage, "PNG", 10, yOffset, 180, 100); // Adjust position and size
-                yOffset += 110; // Update offset for the next content (Gantt chart)
-            }
-        }
 
-        // If the yOffset exceeds maxHeight, add a new page
-        if (yOffset > maxHeight) {
-            doc.addPage(); // Start a new page for the next content
-            yOffset = 10; // Reset Y offset for the new page
+                // Check if Gantt chart will overflow, if yes, add a new page
+                const chartHeight = 110; // Fixed height of the Gantt chart
+                checkPageOverflow(chartHeight);
+
+                // Add image to the PDF
+                doc.addImage(canvasImage, "PNG", contentMargin, yOffset, 180, 100);
+                yOffset += chartHeight; // Update offset for the next content (Gantt chart)
+            }
         }
 
         // Capture Results Table
@@ -39,14 +47,14 @@ export const generatePdf = async (
             const tableElement = tableRef.current;
             const canvas = await html2canvas(tableElement);
             const imgData = canvas.toDataURL("image/png");
-            doc.addImage(imgData, "PNG", 10, yOffset, 180, 100); // Adjust position and size
-            yOffset += 110; // Update offset for the next content (Results table)
-        }
 
-        // If the yOffset exceeds maxHeight, add a new page
-        if (yOffset > maxHeight) {
-            doc.addPage();
-            yOffset = 10;
+            // Check if results table will overflow, if yes, add a new page
+            const tableHeight = 110; // Fixed height of the results table
+            checkPageOverflow(tableHeight);
+
+            // Add image to the PDF
+            doc.addImage(imgData, "PNG", contentMargin, yOffset, 180, 100);
+            yOffset += tableHeight; // Update offset for the next content (Results table)
         }
 
         // Capture Processes Table
@@ -54,14 +62,14 @@ export const generatePdf = async (
             const processTableElement = processTableRef.current;
             const canvas = await html2canvas(processTableElement);
             const imgData = canvas.toDataURL("image/png");
-            doc.addImage(imgData, "PNG", 10, yOffset, 180, 100); // Adjust position and size
-            yOffset += 110; // Update offset for the next content (Processes table)
-        }
 
-        // If the yOffset exceeds maxHeight, add a new page
-        if (yOffset > maxHeight) {
-            doc.addPage();
-            yOffset = 10;
+            // Check if processes table will overflow, if yes, add a new page
+            const processTableHeight = 110; // Fixed height of the process table
+            checkPageOverflow(processTableHeight);
+
+            // Add image to the PDF
+            doc.addImage(imgData, "PNG", contentMargin, yOffset, 180, 100);
+            yOffset += processTableHeight; // Update offset for the next content (Processes table)
         }
     }
 
