@@ -1,4 +1,4 @@
-export default function Controls({ numProcesses, setNumProcesses, timeQuantum, setTimeQuantum, handleGenerate, runAlgorithm, processes }: any) {
+export default function Controls({ numProcesses, setNumProcesses, timeQuantum, setTimeQuantum, handleGenerate }: any) {
     return (
         <div>
             {/* Number of Processes Input */}
@@ -16,7 +16,6 @@ export default function Controls({ numProcesses, setNumProcesses, timeQuantum, s
             {/* Buttons for Generating & Running */}
             <div className="text-center">
                 <button className="btn btn-secondary" onClick={handleGenerate}>Generate Processes</button>
-                <button className="btn btn-primary" onClick={() => runAlgorithm(processes, timeQuantum)}>Run Algorithm</button>
             </div>
         </div>
     );

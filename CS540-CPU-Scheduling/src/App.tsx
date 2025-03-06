@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Scheduler from "./components/Scheduler";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import GanttChart from "./components/GanttChart";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
     const [results, setResults] = useState<any[]>([]);
@@ -11,6 +12,14 @@ function App() {
 
             {/* Scheduler Component */}
             <Scheduler setResults={setResults} />
+
+            {/* Gantt Chart Section */}
+            <div className="row mt-4">
+                <div className="col">
+                    <h4>Execution Timeline (Gantt Chart)</h4>
+                    <GanttChart results={results} />
+                </div>
+            </div>
 
             {/* Results Section */}
             <div className="row mt-4">
