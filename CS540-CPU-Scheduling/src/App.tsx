@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Scheduler from "./components/Scheduler";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
