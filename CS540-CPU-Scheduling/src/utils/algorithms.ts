@@ -9,7 +9,8 @@ export function fifo(processes: { id: number; arrival: number; burst: number }[]
     processes.forEach((p) => {
         let startTime = Math.max(currentTime, p.arrival);
         let finishTime = startTime + p.burst;
-        result.push({ ...p, startTime, finishTime, waiting: startTime - p.arrival });
+        let waitingTime = startTime - p.arrival; // Correct waiting time calculation
+        result.push({ ...p, startTime, finishTime, waiting: waitingTime });
         currentTime = finishTime;
     });
 
@@ -18,59 +19,70 @@ export function fifo(processes: { id: number; arrival: number; burst: number }[]
 
 // Concept: The shortest job (smallest burst time) is executed first.
 // Use Case: Minimizes average waiting time, but can lead to starvation if long processes keep getting postponed.
-export function sjf(processes: { id: number; arrival: number; burst: number }[]) {
-    processes.sort((a, b) => a.burst - b.burst || a.arrival - b.arrival);
-    let currentTime = 0;
-    let result: any[] = [];
-
-    processes.forEach((p) => {
-        let startTime = Math.max(currentTime, p.arrival);
-        let finishTime = startTime + p.burst;
-        result.push({ ...p, startTime, finishTime, waiting: startTime - p.arrival });
-        currentTime = finishTime;
-    });
-
-    return result;
-}
-
-// Concept: Preemptive version of SJF, always runs the process with the least remaining time.
-// Use Case: Provides lower waiting time but requires frequent context switching.
 export function stcf(processes: { id: number; arrival: number; burst: number }[]) {
     let time = 0;
     let completed = 0;
-    let remaining = processes.map(p => ({ ...p, remaining: p.burst }));
+    let remaining = processes.map(p => ({ ...p, remaining: p.burst })); // Properly typed
     let result: any[] = [];
+    let waitingTimes = new Array(processes.length).fill(0); // Track waiting times
 
     while (completed < processes.length) {
         let available = remaining.filter(p => p.arrival <= time && p.remaining > 0);
         if (available.length > 0) {
-            available.sort((a, b) => a.remaining - b.remaining);
+            available.sort((a, b) => a.remaining - b.remaining); // Sort by remaining time
             let current = available[0];
             current.remaining -= 1;
+
+            // Update waiting times for other processes
+            remaining.forEach(p => {
+                if (p.id !== current.id && p.arrival <= time && p.remaining > 0) {
+                    waitingTimes[p.id - 1] += 1; // Increment waiting time
+                }
+            });
+
             if (current.remaining === 0) {
                 completed++;
-                result.push({ ...current, finishTime: time + 1, waiting: time + 1 - current.arrival - current.burst });
+                result.push({ 
+                    ...current, 
+                    finishTime: time + 1, 
+                    waiting: waitingTimes[current.id - 1] // Use tracked waiting time
+                });
             }
         }
         time++;
     }
-    
+
     return result;
 }
 
 // Concept: Each process gets a fixed time slice (quantum) before switching to the next.
 // Use Case: Ensures fairness but may increase context switching.
 export function rr(processes: { id: number; arrival: number; burst: number }[], quantum: number) {
-    let queue = [...processes];
+    let queue = [...processes]; // Properly typed
     let time = 0;
     let result: any[] = [];
+    let waitingTimes = new Array(processes.length).fill(0); // Track waiting times
 
     while (queue.length > 0) {
         let p = queue.shift()!;
         let executionTime = Math.min(p.burst, quantum);
         let finishTime = time + executionTime;
-        result.push({ ...p, startTime: time, finishTime, remaining: p.burst - executionTime });
-        
+
+        // Update waiting times for other processes
+        queue.forEach(proc => {
+            if (proc.arrival <= time && proc.id !== p.id) {
+                waitingTimes[proc.id - 1] += executionTime;
+            }
+        });
+
+        result.push({ 
+            ...p, 
+            startTime: time, 
+            finishTime, 
+            remaining: p.burst - executionTime,
+            waiting: waitingTimes[p.id - 1] // Use tracked waiting time
+        });
+
         if (p.burst > quantum) {
             queue.push({ ...p, burst: p.burst - quantum, arrival: finishTime });
         }
@@ -83,25 +95,67 @@ export function rr(processes: { id: number; arrival: number; burst: number }[], 
 
 // Concept: Multiple queues with different priority levels. A process moves between queues based on execution behavior.
 // Use Case: Balances between fairness and responsiveness, widely used in real operating systems.
-export function mlfq(processes: { id: number; arrival: number; burst: number }[]) {
-    let queues = [[], [], []]; // Multiple queues for different priorities
-    processes.forEach(p => queues[0].push({ ...p, remaining: p.burst }));
+interface Process {
+    id: number;
+    arrival: number;
+    burst: number;
+    remaining?: number; // Optional for tracking remaining time
+}
+
+interface Queue {
+    priority: number;
+    timeSlice: number;
+    processes: Process[];
+}
+
+export function mlfq(processes: Process[]) {
+    let queues: Queue[] = [
+        { priority: 0, timeSlice: 4, processes: [] }, // Highest priority, smallest time slice
+        { priority: 1, timeSlice: 8, processes: [] }, // Medium priority
+        { priority: 2, timeSlice: Infinity, processes: [] } // Lowest priority, no time slice
+    ];
+
+    // Initialize all processes in the highest priority queue
+    processes.forEach(p => queues[0].processes.push({ ...p, remaining: p.burst }));
 
     let time = 0;
     let result: any[] = [];
+    let waitingTimes = new Array(processes.length).fill(0); // Track waiting times
 
-    while (queues.flat().length > 0) {
-        let p = queues[0].shift() || queues[1].shift() || queues[2].shift();
-        let executionTime = Math.min(p.remaining, 4); // Example time slice
-        let finishTime = time + executionTime;
+    while (queues.some(q => q.processes.length > 0)) {
+        for (let queue of queues) {
+            if (queue.processes.length > 0) {
+                let p = queue.processes.shift()!;
+                let executionTime = Math.min(p.remaining!, queue.timeSlice);
+                let finishTime = time + executionTime;
 
-        result.push({ ...p, startTime: time, finishTime, remaining: p.remaining - executionTime });
-        
-        if (p.remaining > executionTime) {
-            queues[1].push({ ...p, remaining: p.remaining - executionTime });
+                // Update waiting times for other processes
+                queues.forEach(q => {
+                    q.processes.forEach(proc => {
+                        if (proc.id !== p.id && proc.arrival <= time) {
+                            waitingTimes[proc.id - 1] += executionTime;
+                        }
+                    });
+                });
+
+                result.push({ 
+                    ...p, 
+                    startTime: time, 
+                    finishTime, 
+                    remaining: p.remaining! - executionTime,
+                    waiting: waitingTimes[p.id - 1] // Use tracked waiting time
+                });
+
+                if (p.remaining! > executionTime) {
+                    // Move to the next lower priority queue
+                    let nextQueue = queues[queue.priority + 1] || queues[queues.length - 1];
+                    nextQueue.processes.push({ ...p, remaining: p.remaining! - executionTime });
+                }
+
+                time = finishTime;
+                break; // Move to the next time unit
+            }
         }
-
-        time = finishTime;
     }
 
     return result;

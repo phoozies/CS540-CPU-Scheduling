@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Controls({ numProcesses, setNumProcesses, timeQuantum, setTimeQuantum, handleGenerate, runAlgorithm, processes }: any) {
     return (
         <div>
@@ -17,8 +15,8 @@ export default function Controls({ numProcesses, setNumProcesses, timeQuantum, s
 
             {/* Buttons for Generating & Running */}
             <div className="text-center">
-                <button className="btn btn-primary me-2" onClick={handleGenerate}>Generate Processes</button>
-                <button className="btn btn-secondary" onClick={() => runAlgorithm(processes, timeQuantum)}>Run Algorithm</button>
+                <button className="btn btn-secondary" onClick={handleGenerate}>Generate Processes</button>
+                <button className="btn btn-primary" onClick={() => runAlgorithm(processes, timeQuantum)}>Run Algorithm</button>
             </div>
         </div>
     );
