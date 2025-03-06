@@ -23,12 +23,12 @@ export default function AlgorithmSelector({ runAlgorithms, timeQuantum }: any) {
             <h4>Select Algorithms</h4>
             
             {/* Algorithm Selection Checkboxes */}
-            <div className="d-flex flex-column align-items-center">
+            <div className="d-flex flex-column align-items-start mx-auto" style={{ width: "fit-content" }}>
                 {algorithmOptions.map((alg) => (
-                    <div key={alg.value} className="form-check">
+                    <div key={alg.value} className="form-check d-flex align-items-center">
                         <input
                             type="checkbox"
-                            className="form-check-input"
+                            className="form-check-input me-2"
                             id={alg.value}
                             checked={selectedAlgorithms.includes(alg.value)}
                             onChange={() => handleCheckboxChange(alg.value)}
