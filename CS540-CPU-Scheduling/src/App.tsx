@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Scheduler from "./components/Scheduler";
 import GanttChart from "./components/GanttChart";
+import ResultsTable from "./components/ResultsTable";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -25,46 +26,42 @@ function App() {
             {/* Gantt Chart Section */}
             <div className="mt-4">
                 <h4>Execution Timeline (Gantt Chart)</h4>
-
-                {results.length > 0 && (
-                    <>
-                        {results.reduce<{ algorithm: string; result: any[] }[][]>((rows, res, index) => {
-                            if (index % 2 === 0) {
-                                // Start a new row every 2 charts
-                                rows.push([res]);
-                            } else {
-                                // Add to the current row
-                                rows[rows.length - 1].push(res);
-                            }
-                            return rows;
-                        }, []).map((row: { algorithm: string; result: any[] }[], rowIndex: number) => (
-                            <div className="row justify-content-center mt-3" key={rowIndex}>
-                                {row.map((res: { algorithm: string; result: any[] }, index: number) => (
-                                    <div key={index} className="col-md-6 mb-4">
-                                        <h5>{res.algorithm}</h5>
-                                        <GanttChart
-                                            algorithm={res.algorithm}
-                                            result={res.result}
-                                            color={colors[(rowIndex * 2 + index) % colors.length]} // Assign a unique color
-                                        />
-                                    </div>
-                                ))}
+                <div className="row">
+                    {results.length > 0 &&
+                        results.map((res, index) => (
+                            <div
+                                key={index}
+                                className={`col-12 col-md-6 mb-4 ${
+                                    results.length % 2 === 1 && index === results.length - 1 ? "mx-auto" : ""
+                                }`}
+                            >
+                                <h5>{res.algorithm}</h5>
+                                <GanttChart
+                                    algorithm={res.algorithm}
+                                    result={res.result}
+                                    color={colors[index % colors.length]} // Assign a color dynamically
+                                />
                             </div>
                         ))}
-                    </>
-                )}
+                </div>
             </div>
 
-            {/* Results Section */}
+            {/* Results Table Section */}
             <div className="mt-4">
                 <h4>Results:</h4>
-                <div className="row justify-content-center">
-                    {results.map((res: { algorithm: string; result: any[] }, index: number) => (
-                        <div key={index} className="col-md-6 mt-3 p-2 border rounded bg-light">
-                            <h5>{res.algorithm}</h5>
-                            <pre>{JSON.stringify(res.result, null, 2)}</pre>
-                        </div>
-                    ))}
+                <div className="row">
+                    {results.length > 0 &&
+                        results.map((res, index) => (
+                            <div
+                                key={index}
+                                className={`col-12 col-md-6 mb-4 ${
+                                    results.length % 2 === 1 && index === results.length - 1 ? "mx-auto" : ""
+                                }`}
+                            >
+                                <h5>{res.algorithm}</h5>
+                                <ResultsTable results={[res]} />
+                            </div>
+                        ))}
                 </div>
             </div>
         </div>
