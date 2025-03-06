@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Scheduler from "./components/Scheduler";
 import GanttChart from "./components/GanttChart";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,7 +17,12 @@ function App() {
             <div className="row mt-4">
                 <div className="col">
                     <h4>Execution Timeline (Gantt Chart)</h4>
-                    <GanttChart results={results} />
+                    {results.map((res, index) => (
+                        <div key={index} className="mb-4">
+                            <h5>{res.algorithm}</h5>
+                            <GanttChart algorithm={res.algorithm} result={res.result} />
+                        </div>
+                    ))}
                 </div>
             </div>
 

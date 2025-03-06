@@ -5,10 +5,11 @@ import { Chart, ScatterController, LinearScale, PointElement, LineElement, Toolt
 Chart.register(ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 interface GanttChartProps {
-    results: { algorithm: string; result: any[] }[];
+    algorithm: string;
+    result: any[];
 }
 
-const GanttChart: React.FC<GanttChartProps> = ({ results }) => {
+const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstance = useRef<Chart<"scatter"> | null>(null);
 
@@ -21,36 +22,26 @@ const GanttChart: React.FC<GanttChartProps> = ({ results }) => {
                     chartInstance.current.destroy();
                 }
 
-                // Create datasets for each algorithm's result
-                const datasets = results.map((res, index) => {
-                    const colors = [
-                        "rgba(255, 99, 132, 0.8)",
-                        "rgba(54, 162, 235, 0.8)",
-                        "rgba(75, 192, 192, 0.8)",
-                        "rgba(153, 102, 255, 0.8)",
-                        "rgba(255, 159, 64, 0.8)",
-                    ];
-
-                    return {
-                        label: res.algorithm,
-                        backgroundColor: colors[index % colors.length],
-                        borderColor: colors[index % colors.length],
-                        fill: false,
-                        borderWidth: 15,
-                        pointRadius: 0,
-                        data: res.result.map((p) => ({
-                            x: p.startTime,
-                            y: p.id,
-                            x2: p.finishTime,
-                        })),
-                    };
-                });
+                // Create dataset for the algorithm's result
+                const dataset = {
+                    label: algorithm,
+                    backgroundColor: "rgba(75, 192, 192, 0.8)",
+                    borderColor: "rgba(75, 192, 192, 0.8)",
+                    fill: false,
+                    borderWidth: 15,
+                    pointRadius: 0,
+                    data: result.map((p) => ({
+                        x: p.startTime,
+                        y: p.id,
+                        x2: p.finishTime,
+                    })),
+                };
 
                 // Create the chart
                 chartInstance.current = new Chart(ctx, {
                     type: "scatter",
                     data: {
-                        datasets: datasets,
+                        datasets: [dataset],
                     },
                     options: {
                         scales: {
@@ -130,7 +121,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ results }) => {
                 chartInstance.current.destroy();
             }
         };
-    }, [results]);
+    }, [algorithm, result]);
 
     return <canvas ref={chartRef} />;
 };
