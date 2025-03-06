@@ -7,9 +7,10 @@ Chart.register(ScatterController, LinearScale, PointElement, LineElement, Toolti
 interface GanttChartProps {
     algorithm: string;
     result: any[];
+    color: string; // Add a color prop
 }
 
-const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result }) => {
+const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstance = useRef<Chart<"scatter"> | null>(null);
 
@@ -25,8 +26,8 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result }) => {
                 // Create dataset for the algorithm's result
                 const dataset = {
                     label: algorithm,
-                    backgroundColor: "rgba(75, 192, 192, 0.8)",
-                    borderColor: "rgba(75, 192, 192, 0.8)",
+                    backgroundColor: color,
+                    borderColor: color,
                     fill: false,
                     borderWidth: 15,
                     pointRadius: 0,
@@ -92,7 +93,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result }) => {
                         const ctx = chart.ctx;
                         chart.data.datasets.forEach((dataset: any, datasetIndex: number) => {
                             const meta = chart.getDatasetMeta(datasetIndex);
-                            meta.data.forEach((point: any, index: number) => {
+                            meta.data.forEach((index: number) => {
                                 const data = dataset.data[index];
                                 const xScale = chart.scales.x;
                                 const yScale = chart.scales.y;
@@ -121,7 +122,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result }) => {
                 chartInstance.current.destroy();
             }
         };
-    }, [algorithm, result]);
+    }, [algorithm, result, color]);
 
     return <canvas ref={chartRef} />;
 };
