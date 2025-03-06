@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const algorithmOptions = [
     { value: "fifo", label: "FIFO" },

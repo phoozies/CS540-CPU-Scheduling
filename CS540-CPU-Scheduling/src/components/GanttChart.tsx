@@ -20,7 +20,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstance = useRef<Chart<"scatter"> | null>(null);
     const [currentTime, setCurrentTime] = useState(0); // Track current time
-    const [activeProcesses, setActiveProcesses] = useState<Process[]>([]); // Track active processes
+    const [, setActiveProcesses] = useState<Process[]>([]); // Track active processes
     const [completedProcesses, setCompletedProcesses] = useState<Process[]>([]); // Track completed processes
     const [isFinished, setIsFinished] = useState(false); // Flag to check if the simulation is finished
 
@@ -110,7 +110,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
                         const ctx = chart.ctx;
                         chart.data.datasets.forEach((dataset: any, datasetIndex: number) => {
                             const meta = chart.getDatasetMeta(datasetIndex);
-                            meta.data.forEach((point: any, index: number) => {
+                            meta.data.forEach((_point: any, index: number) => {
                                 const data = dataset.data[index];
                                 const xScale = chart.scales.x;
                                 const yScale = chart.scales.y;

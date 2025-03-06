@@ -1,4 +1,3 @@
-
 // Concept: The process that arrives first is executed first, without preemption.
 // Use Case: Simple but may lead to the convoy effect where short jobs get stuck behind long ones.
 export function fifo(processes: { id: number; arrival: number; burst: number }[]) {

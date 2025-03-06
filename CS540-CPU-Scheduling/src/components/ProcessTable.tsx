@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ProcessTable({ processes }: { processes: any[] }) {
     return (
         <div className="mt-4">
