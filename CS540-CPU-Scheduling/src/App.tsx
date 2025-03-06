@@ -58,7 +58,6 @@ function App() {
                                     results.length % 2 === 1 && index === results.length - 1 ? "mx-auto" : ""
                                 }`}
                             >
-                                <h5>{res.algorithm}</h5>
                                 <ResultsTable results={[res]} />
                             </div>
                         ))}
