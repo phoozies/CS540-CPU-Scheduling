@@ -30,7 +30,7 @@ export default function Scheduler({ setResults }: { setResults: Function }) {
             {/* Row 1 - Two Columns */}
             <div className="row mb-3">
                 {/* Column 1: Controls */}
-                <div className="col-md-6">
+                <div className="col-md-6 shadow-lg rounded">
                     <Controls
                         numProcesses={numProcesses}
                         setNumProcesses={setNumProcesses}
@@ -43,14 +43,14 @@ export default function Scheduler({ setResults }: { setResults: Function }) {
                 </div>
 
                 {/* Column 2: Algorithm Selector (Checkboxes) */}
-                <div className="col-md-6">
+                <div className="col-md-6 shadow-lg rounded">
                     <AlgorithmSelector runAlgorithms={runAlgorithms} timeQuantum={timeQuantum} />
                 </div>
             </div>
 
             {/* Row 2 - Process Table */}
             <div className="row">
-                <div className="col">
+                <div className="col shadow-lg rounded">
                     <ProcessTable processes={processes} />
                 </div>
             </div>
