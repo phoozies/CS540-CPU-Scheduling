@@ -22,6 +22,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
     const [currentTime, setCurrentTime] = useState(0); // Track current time
     const [activeProcesses, setActiveProcesses] = useState<Process[]>([]); // Track active processes
     const [completedProcesses, setCompletedProcesses] = useState<Process[]>([]); // Track completed processes
+    const [isFinished, setIsFinished] = useState(false); // Flag to check if the simulation is finished
 
     // Calculate the total duration (max finish time) of all processes
     const totalTime = Math.max(...result.map(p => p.finishTime));
@@ -143,35 +144,38 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
     // Simulate the passage of time and update active and completed processes
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentTime((prevTime) => {
-                const newTime = prevTime + 1;
+            if (!isFinished) {
+                setCurrentTime((prevTime) => {
+                    const newTime = prevTime + 1;
 
-                // Find processes that have started but not yet finished
-                const newActiveProcesses = result
-                    .filter((p) => p.startTime <= newTime && p.finishTime >= newTime)
-                    .map((p) => ({
-                        ...p,
-                        finishTime: newTime, // Update the finish time to the current time
-                    }));
+                    // Find processes that have started but not yet finished
+                    const newActiveProcesses = result
+                        .filter((p) => p.startTime <= newTime && p.finishTime >= newTime)
+                        .map((p) => ({
+                            ...p,
+                            finishTime: newTime, // Update the finish time to the current time
+                        }));
 
-                // Append active processes to completed processes if finished
-                const completed = newActiveProcesses.filter(p => p.finishTime >= p.startTime);
-                const newCompletedProcesses = [...completedProcesses, ...completed];
+                    // Append active processes to completed processes if finished
+                    const completed = newActiveProcesses.filter(p => p.finishTime >= p.startTime);
+                    const newCompletedProcesses = [...completedProcesses, ...completed];
 
-                setActiveProcesses(newActiveProcesses);
-                setCompletedProcesses(newCompletedProcesses);
+                    setActiveProcesses(newActiveProcesses);
+                    setCompletedProcesses(newCompletedProcesses);
 
-                // Stop the animation when all processes are done
-                if (newTime >= totalTime) {
-                    clearInterval(interval);
-                }
+                    // Check if all processes are done
+                    if (newTime >= totalTime) {
+                        clearInterval(interval);
+                        setIsFinished(true); // Set the simulation as finished
+                    }
 
-                return newTime;
-            });
+                    return newTime;
+                });
+            }
         }, 500); // Update every 500ms
 
         return () => clearInterval(interval); // Cleanup on unmount
-    }, [result, completedProcesses, totalTime]);
+    }, [result, completedProcesses, totalTime, isFinished]);
 
     return (
         <div>
