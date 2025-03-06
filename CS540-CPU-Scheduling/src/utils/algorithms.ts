@@ -19,6 +19,23 @@ export function fifo(processes: { id: number; arrival: number; burst: number }[]
 
 // Concept: The shortest job (smallest burst time) is executed first.
 // Use Case: Minimizes average waiting time, but can lead to starvation if long processes keep getting postponed.
+export function sjf(processes: { id: number; arrival: number; burst: number }[]) {
+    processes.sort((a, b) => a.burst - b.burst || a.arrival - b.arrival);
+    let currentTime = 0;
+    let result: any[] = [];
+
+    processes.forEach((p) => {
+        let startTime = Math.max(currentTime, p.arrival);
+        let finishTime = startTime + p.burst;
+        result.push({ ...p, startTime, finishTime, waiting: startTime - p.arrival });
+        currentTime = finishTime;
+    });
+
+    return result;
+}
+
+// Concept: Preemptive version of SJF, always runs the process with the least remaining time.
+// Use Case: Provides lower waiting time but requires frequent context switching.
 export function stcf(processes: { id: number; arrival: number; burst: number }[]) {
     let time = 0;
     let completed = 0;
