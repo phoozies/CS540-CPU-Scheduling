@@ -18,14 +18,14 @@ function App() {
 
     return (
         <div className="container text-center shadow-lg p-3 rounded">
-            <h1 className="text-center">CPU Scheduling Simulator</h1>
+            <h1 className="text-center p-3 text-white rounded shadow-lg" style={{ backgroundColor: "#27251F"}}>CPU Scheduling Simulator</h1>
 
             {/* Scheduler Component */}
             <Scheduler setResults={setResults} />
 
             {/* Gantt Chart Section */}
-            <div className="mt-4">
-                <h4>Execution Timeline (Gantt Chart)</h4>
+            <div className="mt-4 container-fluid shadow-lg m-3 rounded">
+                <h4 className="rounded bg-dark p-2 text-white">Execution Timeline (Gantt Chart)</h4>
                 <div className="row">
                     {results.length > 0 &&
                         results.map((res, index) => (
@@ -35,7 +35,7 @@ function App() {
                                     results.length % 2 === 1 && index === results.length - 1 ? "mx-auto" : ""
                                 }`}
                             >
-                                <h5>{res.algorithm}</h5>
+                                <h5 className="shadow-lg text-white p-2 m-2 rounded">{res.algorithm}</h5>
                                 <GanttChart
                                     algorithm={res.algorithm}
                                     result={res.result}
@@ -47,8 +47,8 @@ function App() {
             </div>
 
             {/* Results Table Section */}
-            <div className="mt-4">
-                <h4>Results:</h4>
+            <div className="mt-4 container-fluid shadow-lg m-3 rounded">
+                <h4 className="shadow-lg rounded bg-dark text-white p-3">Results Table:</h4>
                 <div className="row">
                     {results.length > 0 &&
                         results.map((res, index) => (

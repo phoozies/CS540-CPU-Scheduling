@@ -19,7 +19,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
             <div className="table-responsive">
                 {results.map((res, index) => (
                     <div key={index} className="mb-4">
-                        <h5>{res.algorithm}</h5>
+                        <h5 className="rounded shadow text-white p-2">{res.algorithm}</h5>
                         <table className="table table-bordered table-striped">
                             <thead className="thead-dark">
                                 <tr>

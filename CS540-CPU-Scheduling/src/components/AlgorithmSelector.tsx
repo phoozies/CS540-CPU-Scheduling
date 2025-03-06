@@ -33,14 +33,14 @@ export default function AlgorithmSelector({ runAlgorithms, timeQuantum }: any) {
                             checked={selectedAlgorithms.includes(alg.value)}
                             onChange={() => handleCheckboxChange(alg.value)}
                         />
-                        <label className="form-check-label" htmlFor={alg.value}>{alg.label}</label>
+                        <label className="form-check-label text-white" htmlFor={alg.value}>{alg.label}</label>
                     </div>
                 ))}
             </div>
 
             {/* Button to Run Selected Algorithms */}
             <button
-                className="btn btn-primary mt-3"
+                className="btn btn-warning mt-3"
                 onClick={() => runAlgorithms(selectedAlgorithms, timeQuantum)}
                 disabled={selectedAlgorithms.length === 0}
             >

@@ -15,7 +15,7 @@ export default function Controls({ numProcesses, setNumProcesses, timeQuantum, s
 
             {/* Buttons for Generating & Running */}
             <div className="text-center">
-                <button className="btn btn-secondary" onClick={handleGenerate}>Generate Processes</button>
+                <button className="btn btn-warning" onClick={handleGenerate}>Generate Processes</button>
             </div>
         </div>
     );

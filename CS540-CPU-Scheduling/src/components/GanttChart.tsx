@@ -58,8 +58,8 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
                     },
                     options: {
                         animation: {
-                            duration: 500, // Animation duration in milliseconds
-                            easing: "linear", // Smooth linear animation
+                            duration: 500,
+                            easing: "linear",
                         },
                         scales: {
                             x: {
@@ -68,36 +68,41 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
                                 title: {
                                     display: true,
                                     text: "Timeline",
+                                    color: "white", // White axis title
                                 },
-                                min: 0, // Start the x-axis from 0
-                                max: totalTime, // Set the max to total time (finish time of last process)
                                 ticks: {
-                                    stepSize: 1,
+                                    color: "white", // White x-axis labels
                                 },
+                                grid: {
+                                    color: "rgba(255, 255, 255, 0.2)", // Light white grid lines
+                                },
+                                min: 0,
+                                max: totalTime,
                             },
                             y: {
                                 title: {
                                     display: true,
                                     text: "Process ID",
+                                    color: "white", // White axis title
                                 },
-                                min: 0, // Start the y-axis from 0
                                 ticks: {
-                                    stepSize: 1,
+                                    color: "white", // White y-axis labels
                                 },
+                                grid: {
+                                    color: "rgba(255, 255, 255, 0.2)", // Light white grid lines
+                                },
+                                min: 0,
                             },
                         },
                         plugins: {
                             tooltip: {
-                                callbacks: {
-                                    label: (context) => {
-                                        const data = context.raw as { x: number; y: number; x2: number };
-                                        return `Process ${data.y}: ${data.x} to ${data.x2}`;
-                                    },
-                                },
+                                titleColor: "white", // White tooltip title
+                                bodyColor: "white", // White tooltip text
                             },
                             legend: {
-                                display: true,
-                                position: "top",
+                                labels: {
+                                    color: "white", // White legend labels
+                                },
                             },
                         },
                     },

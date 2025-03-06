@@ -1,9 +1,9 @@
 export default function ProcessTable({ processes }: { processes: any[] }) {
     return (
         <div className="mt-4">
-            <h4>Generated Processes:</h4>
-            <table className="table table-bordered">
-                <thead className="table-dark">
+            <h4 className="rounded shadow-lg bg-dark text-white p-2">Generated Processes:</h4>
+            <table className="table table-bordered table-striped table-secondary">
+                <thead className="table-secondary">
                     <tr>
                         <th>Process ID</th>
                         <th>Arrival Time</th>
