@@ -14,9 +14,10 @@ interface GanttChartProps {
     algorithm: string;
     result: Process[]; // List of processes
     color: string;
+    isExportingPDF?: boolean; // Flag to check if we are exporting to PDF
 }
 
-const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => {
+const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color, isExportingPDF = false }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstance = useRef<Chart<"scatter"> | null>(null);
     const [currentTime, setCurrentTime] = useState(0); // Track current time
@@ -68,13 +69,13 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
                                 title: {
                                     display: true,
                                     text: "Timeline",
-                                    color: "white", // White axis title
+                                    color: isExportingPDF ? "black" : "white", // Change to black for PDF
                                 },
                                 ticks: {
-                                    color: "white", // White x-axis labels
+                                    color: isExportingPDF ? "black" : "white", // Change to black for PDF
                                 },
                                 grid: {
-                                    color: "rgba(255, 255, 255, 0.2)", // Light white grid lines
+                                    color: isExportingPDF ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.2)", // Light black grid lines for PDF
                                 },
                                 min: 0,
                                 max: totalTime,
@@ -83,25 +84,25 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
                                 title: {
                                     display: true,
                                     text: "Process ID",
-                                    color: "white", // White axis title
+                                    color: isExportingPDF ? "black" : "white", // Change to black for PDF
                                 },
                                 ticks: {
-                                    color: "white", // White y-axis labels
+                                    color: isExportingPDF ? "black" : "white", // Change to black for PDF
                                 },
                                 grid: {
-                                    color: "rgba(255, 255, 255, 0.2)", // Light white grid lines
+                                    color: isExportingPDF ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.2)", // Light black grid lines for PDF
                                 },
                                 min: 0,
                             },
                         },
                         plugins: {
                             tooltip: {
-                                titleColor: "white", // White tooltip title
-                                bodyColor: "white", // White tooltip text
+                                titleColor: isExportingPDF ? "black" : "white", // Tooltip title black for PDF
+                                bodyColor: isExportingPDF ? "black" : "white", // Tooltip text black for PDF
                             },
                             legend: {
                                 labels: {
-                                    color: "white", // White legend labels
+                                    color: isExportingPDF ? "black" : "white", // Legend labels black for PDF
                                 },
                             },
                         },
@@ -144,7 +145,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
                 chartInstance.current.destroy();
             }
         };
-    }, [algorithm, color, completedProcesses, totalTime]);
+    }, [algorithm, color, completedProcesses, totalTime, isExportingPDF]);
 
     // Simulate the passage of time and update active and completed processes
     useEffect(() => {
