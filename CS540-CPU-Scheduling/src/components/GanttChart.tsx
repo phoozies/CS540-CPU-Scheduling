@@ -178,7 +178,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color }) => 
     }, [result, completedProcesses, totalTime, isFinished]);
 
     return (
-        <div>
+        <div className="rounded shadow-lg m-3 p-3">
             <canvas ref={chartRef} />
             <div className="mt-3">
                 <div className="progress">
