@@ -39,34 +39,47 @@ export function sjf(processes: { id: number; arrival: number; burst: number }[])
 export function stcf(processes: { id: number; arrival: number; burst: number }[]) {
     let time = 0;
     let completed = 0;
-    let remaining = processes.map(p => ({ ...p, remaining: p.burst })); // Properly typed
+    let remaining = processes.map(p => ({
+        ...p,
+        remaining: p.burst,
+        startTime: -1, // Initialize startTime as -1 (not started)
+    }));
+
     let result: any[] = [];
-    let waitingTimes = new Array(processes.length).fill(0); // Track waiting times
+    let waitingTimes = new Map<number, number>(); // Track waiting times
 
     while (completed < processes.length) {
         let available = remaining.filter(p => p.arrival <= time && p.remaining > 0);
-        if (available.length > 0) {
-            available.sort((a, b) => a.remaining - b.remaining); // Sort by remaining time
-            let current = available[0];
-            current.remaining -= 1;
 
-            // Update waiting times for other processes
+        if (available.length > 0) {
+            available.sort((a, b) => a.remaining - b.remaining || a.arrival - b.arrival);
+            let current = available[0];
+
+            if (current.startTime === -1) {
+                current.startTime = time; // Set start time only once
+            }
+
+            current.remaining -= 1;
+            time++; // Move to the next time unit
+
+            // Update waiting times for other processes that are waiting
             remaining.forEach(p => {
                 if (p.id !== current.id && p.arrival <= time && p.remaining > 0) {
-                    waitingTimes[p.id - 1] += 1; // Increment waiting time
+                    waitingTimes.set(p.id, (waitingTimes.get(p.id) || 0) + 1);
                 }
             });
 
             if (current.remaining === 0) {
                 completed++;
-                result.push({ 
-                    ...current, 
-                    finishTime: time + 1, 
-                    waiting: waitingTimes[current.id - 1] // Use tracked waiting time
+                result.push({
+                    ...current,
+                    finishTime: time,
+                    waiting: waitingTimes.get(current.id) || 0,
                 });
             }
+        } else {
+            time++; // If no process is available, just move forward in time
         }
-        time++;
     }
 
     return result;
