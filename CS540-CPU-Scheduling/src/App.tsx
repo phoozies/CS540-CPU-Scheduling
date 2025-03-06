@@ -24,9 +24,14 @@ function App() {
 
     return (
         <div className="container text-center shadow-lg p-3 rounded">
-            <h1 className="text-center p-3 text-white rounded shadow-lg" style={{ backgroundColor: "#27251F" }}>
-                CPU Scheduling Simulator
-            </h1>
+            <div className="text-center p-3 text-white rounded shadow-lg" style={{ backgroundColor: "#27251F" }}>
+                <h1>
+                    CPU Scheduling Simulator
+                </h1>
+                <h2 className="fst-italic">
+                    CS540 Operating Systems Project: Thinh Vo
+                </h2>
+            </div>
 
             {/* Scheduler Component */}
             <Scheduler setResults={setResults} />
