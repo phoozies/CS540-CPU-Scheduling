@@ -20,7 +20,7 @@ export default function AlgorithmSelector({ runAlgorithms, timeQuantum }: any) {
 
     return (
         <div className="text-center">
-            <h4>Select Algorithms</h4>
+            <h4 className="text-white rounded p-2 shadow">Select Algorithms</h4>
             
             {/* Algorithm Selection Checkboxes */}
             <div className="d-flex flex-column align-items-start mx-auto" style={{ width: "fit-content" }}>

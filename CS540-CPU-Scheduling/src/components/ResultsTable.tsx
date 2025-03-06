@@ -15,13 +15,13 @@ interface ResultsTableProps {
 
 const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
     return (
-        <div className="shadow-lg m-3 p-3">
+        <div className="shadow-lg m-3 p-3 rounded">
             <div className="table-responsive">
                 {results.map((res, index) => (
                     <div key={index} className="mb-4">
                         <h5 className="rounded shadow text-white p-2">{res.algorithm}</h5>
-                        <table className="table table-bordered table-striped">
-                            <thead className="thead-dark">
+                        <table className="table table-bordered table-striped table-secondary">
+                            <thead className="table table-secondary">
                                 <tr>
                                     <th>Process ID</th>
                                     <th>Arrival Time</th>
