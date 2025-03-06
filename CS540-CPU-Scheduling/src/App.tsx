@@ -31,7 +31,7 @@ function App() {
                         results.map((res, index) => (
                             <div
                                 key={index}
-                                className={`col-12 col-md-6 mb-4 ${
+                                className={`col-12 col-md-6 mb-4 shadow-lg ${
                                     results.length % 2 === 1 && index === results.length - 1 ? "mx-auto" : ""
                                 }`}
                             >
@@ -54,7 +54,7 @@ function App() {
                         results.map((res, index) => (
                             <div
                                 key={index}
-                                className={`col-12 col-md-6 mb-4 ${
+                                className={`col-12 col-md-6 mb-4 shadow-lg ${
                                     results.length % 2 === 1 && index === results.length - 1 ? "mx-auto" : ""
                                 }`}
                             >
