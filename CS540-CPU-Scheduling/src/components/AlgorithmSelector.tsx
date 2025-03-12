@@ -10,15 +10,17 @@ const algorithmOptions = [
 ];
 
 export default function AlgorithmSelector({ runAlgorithms, timeQuantum }: any) {
+    // Keep track of selected algorithms with use state
     const [selectedAlgorithms, setSelectedAlgorithms] = useState<string[]>([]);
 
-    // Toggle selection
+    // Handle checkbox selection
     const handleCheckboxChange = (value: string) => {
         setSelectedAlgorithms((prev) =>
             prev.includes(value) ? prev.filter((alg) => alg !== value) : [...prev, value]
         );
     };
 
+    // Return html element
     return (
         <div className="text-center">
             <h4 className="text-white rounded p-2 shadow">Select Algorithms</h4>
