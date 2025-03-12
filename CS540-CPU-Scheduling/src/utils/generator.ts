@@ -1,3 +1,4 @@
+// Generate processes given input
 export function generateProcesses(count: number) {
     return Array.from({ length: count }, (_, i) => ({
         id: i + 1,

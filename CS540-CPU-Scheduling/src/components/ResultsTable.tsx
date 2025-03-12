@@ -13,6 +13,7 @@ interface ResultsTableProps {
     results: { algorithm: string; result: Process[] }[];
 }
 
+// Return the algorithm results as a table
 const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
     return (
         <div className="shadow-lg m-3 p-3 rounded">

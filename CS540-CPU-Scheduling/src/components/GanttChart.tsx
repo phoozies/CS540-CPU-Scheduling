@@ -183,6 +183,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ algorithm, result, color, isExp
         return () => clearInterval(interval); // Cleanup on unmount
     }, [result, completedProcesses, totalTime, isFinished]);
 
+    // Create progress bar for showcasing total time
     return (
         <div className="rounded shadow-lg m-3 p-3">
             <canvas ref={chartRef} />

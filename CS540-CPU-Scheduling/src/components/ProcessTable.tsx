@@ -1,3 +1,4 @@
+// Return the processes data as a table
 export default function ProcessTable({ processes }: { processes: any[] }) {
     return (
         <div className="mt-4">
