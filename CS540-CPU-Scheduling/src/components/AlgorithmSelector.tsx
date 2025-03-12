@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// Declare the algorithms
 const algorithmOptions = [
     { value: "fifo", label: "FIFO" },
     { value: "sjf", label: "SJF" },
