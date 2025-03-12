@@ -1,5 +1,3 @@
-// src/utils/generatePdf.ts
-
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -24,7 +22,6 @@ export const generatePdf = async (
 
     // Capture Gantt charts
     for (let i = 0; i < results.length; i++) {
-        const res = results[i];
 
         // Capture Gantt Chart for this result
         if (ganttRef.current) {

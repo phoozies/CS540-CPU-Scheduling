@@ -4,7 +4,7 @@ import GanttChart from "./components/GanttChart";
 import ResultsTable from "./components/ResultsTable";
 import ProcessTable from "./components/ProcessTable";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { generatePdf } from "./utils/generatePDF.ts"; // Import the generatePDF function
+import { generatePdf } from "./utils/generatePdf.ts"; // Import the generatePDF function
 
 function App() {
     const [results, setResults] = useState<{ algorithm: string; result: any[] }[]>([]);
